@@ -1,0 +1,31 @@
+Maze MDP - Value Iteration
+States (including goal): 47
+Gamma: 0.99
+Tolerance: 1.0e-08
+Iterations: 21
+Final maximum update: 0
+Solver runtime: 0.000927 s (one run)
+Shortest path: 16 steps
+Undiscounted return: -16
+Discounted return: -14.8542228905
+Start value: -14.8542228905
+BFS and all-state value verification: PASS
+
+Greedy policy (S=start, G=goal):
+#############
+#S>>>>>>>>>v#
+###^###^###v#
+#>>^#>>^#>>v#
+#######^###v#
+#>>>>>>^#>>v#
+###########v#
+#>>>>>>>>>>G#
+#############
+
+Path actions: > > > > > > > > > > v v v v v v
+
+Gamma comparison:
+gamma    iterations    path_steps    start_value
+0.9      21            16            -8.1469798111
+0.95     21            16            -11.1974666270
+0.99     21            16            -14.8542228905

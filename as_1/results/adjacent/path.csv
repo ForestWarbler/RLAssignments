@@ -1,0 +1,3 @@
+step,row,col,dr,dc,reward
+0,1,1,0,1,-1.0
+1,1,2,,,

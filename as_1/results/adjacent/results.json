@@ -1,0 +1,130 @@
+{
+  "maze": [
+    "####",
+    "#SG#",
+    "####"
+  ],
+  "parameters": {
+    "gamma": 0.99,
+    "tolerance": 1e-08,
+    "initial_value": 0.0,
+    "action_order": [
+      [
+        -1,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        0,
+        -1
+      ]
+    ],
+    "transition_model": "deterministic",
+    "collision_rule": "stay in place and receive -1",
+    "step_reward": -1.0,
+    "terminal_value": 0.0,
+    "update_rule": "synchronous"
+  },
+  "python_version": "3.13.7",
+  "state_count": 2,
+  "start": [
+    1,
+    1
+  ],
+  "goal": [
+    1,
+    2
+  ],
+  "iterations": 2,
+  "runtime_seconds": 1.4500001270789653e-05,
+  "convergence": [
+    {
+      "iteration": 1,
+      "max_delta": 1.0
+    },
+    {
+      "iteration": 2,
+      "max_delta": 0.0
+    }
+  ],
+  "states": [
+    {
+      "row": 1,
+      "col": 1,
+      "value": -1.0,
+      "action": [
+        0,
+        1
+      ],
+      "distance_to_goal": 1
+    },
+    {
+      "row": 1,
+      "col": 2,
+      "value": 0.0,
+      "action": null,
+      "distance_to_goal": 0
+    }
+  ],
+  "path": [
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      2
+    ]
+  ],
+  "path_actions": [
+    [
+      0,
+      1
+    ]
+  ],
+  "path_rewards": [
+    -1.0
+  ],
+  "path_length": 1,
+  "undiscounted_return": -1.0,
+  "discounted_return": -1.0,
+  "start_value": -1.0,
+  "bfs_shortest_path_length": 1,
+  "max_value_error": 0.0,
+  "verified": true,
+  "case": "adjacent",
+  "input_file": "cases/adjacent.in",
+  "gamma_comparison": [
+    {
+      "gamma": 0.9,
+      "iterations": 2,
+      "path_length": 1,
+      "start_value": -1.0,
+      "runtime_seconds": 7.458002073690295e-06,
+      "verified": true
+    },
+    {
+      "gamma": 0.95,
+      "iterations": 2,
+      "path_length": 1,
+      "start_value": -1.0,
+      "runtime_seconds": 5.2919931476935744e-06,
+      "verified": true
+    },
+    {
+      "gamma": 0.99,
+      "iterations": 2,
+      "path_length": 1,
+      "start_value": -1.0,
+      "runtime_seconds": 1.4500001270789653e-05,
+      "verified": true
+    }
+  ]
+}
