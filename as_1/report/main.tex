@@ -8,6 +8,7 @@
 \usepackage{enumitem}
 \usepackage{graphicx}
 \usepackage{listings}
+\usepackage{needspace}
 \usepackage{setspace}
 \usepackage{titlesec}
 \usepackage{tikz}
@@ -40,6 +41,7 @@
 \lstset{
   backgroundcolor=\color{codegray},
   basicstyle=\ttfamily\small,
+  breakatwhitespace=true,
   breaklines=true,
   columns=fullflexible,
   commentstyle=\color{codecomment},
@@ -203,166 +205,146 @@ V^\pi(s)=\mathbb{E}_\pi\!\left[
 
 \section{算法设计}
 
-\subsection{求解思路}
-
-由于迷宫的转移与奖励模型在第 2 节中已经完全已知，求解时不需要与环境交互采样，可以直接使用动态规划。记贝尔曼最优算子为 $\mathcal{T}$，它对任意有界价值函数 $V$ 的作用定义为
+价值迭代的关键是反复使用 Bellman 最优方程更新每个状态的价值。在第 $k$ 轮迭代中，代码中的 \texttt{values} 表示 $V_k$。对于状态 $s$ 下的动作 $a$，\texttt{maze.step} 返回执行该动作后的状态 $s'$、即时奖励 $r$ 和终止标志，\texttt{action\_value} 随后计算
 \[
-(\mathcal{T}V)(s)=
+Q_k(s,a)=
 \begin{cases}
-0, & s=s_g,\\[2pt]
-\displaystyle\max_{a\in\mathcal{A}}\Bigl\{R(s,a)+\gamma V\bigl(f(s,a)\bigr)\Bigr\}, & s\ne s_g .
+r+\gamma V_k(s'), & \text{该动作后回合未结束},\\
+r, & \text{该动作后回合结束}.
 \end{cases}
 \]
-其中终点被显式地当作吸收态：备份时不再对终点自举，而是直接把价值固定为 $V(s_g)=0$，这与终点的奖励 $R(s_g,\cdot)=0$ 及零后续奖励一致。其余状态的最优性备份只涉及一个后继状态，因此期望算子退化为一次函数求值。
-
-该算子具有两条关键性质：
-\begin{itemize}[nosep]
-  \item \textbf{单调性}：若价值函数逐分量满足 $V\le U$，则 $\mathcal{T}V\le\mathcal{T}U$；
-  \item \textbf{压缩性}：记最大范数 $\|V\|_\infty=\max_{s\in\mathcal{S}}|V(s)|$，则
-  \[
-  \|\mathcal{T}V-\mathcal{T}U\|_\infty\le\gamma\|V-U\|_\infty .
-  \]
-\end{itemize}
-压缩性的证明只用到不等式 $|\max_a x_a-\max_a y_a|\le\max_a|x_a-y_a|$。对 $s\ne s_g$ 有
+对应代码中的 \texttt{reward + (0.0 if done else gamma * values[successor])}。接着，\texttt{updated} 中对所有动作价值取最大值，实现了
 \[
-\bigl|(\mathcal{T}V)(s)-(\mathcal{T}U)(s)\bigr|
-\le\gamma\max_{a\in\mathcal{A}}\bigl|V\bigl(f(s,a)\bigr)-U\bigl(f(s,a)\bigr)\bigr|
-\le\gamma\|V-U\|_\infty ,
+V_{k+1}(s)=\max_{a\in\mathcal{A}}Q_k(s,a).
 \]
-而在 $s=s_g$ 处两者之差为 $0$，故上式对所有状态成立。
+只有当所有状态的新价值都计算完毕后，\texttt{updated} 才会赋给 \texttt{values}，所以同一轮中的全部状态都依据同一个 $V_k$ 更新，即同步价值迭代。相邻两轮的价值函数基本不再变化后，代码再次使用相同的动作价值计算，并选择使其最大的动作，从而实现 $\pi^*(s)=\arg\max_a Q^*(s,a)$。相关代码如下。
 
-由 $\gamma<1$ 与压缩性，Banach 不动点定理保证 $\mathcal{T}$ 存在唯一不动点 $V^*=\mathcal{T}V^*$，它就是最优价值函数；并且从任意初值出发的迭代 $V_{k+1}=\mathcal{T}V_k$ 都以几何速率 $\gamma^k$ 收敛到 $V^*$。基于这一迭代格式的算法即价值迭代（Value Iteration）。
+\begin{lstlisting}[style=pythonstyle,caption={Bellman 最优更新与策略提取},label={lst:value-iteration}]
+    def action_value(state: State, move: Move) -> float:
+        successor, reward, done = maze.step(state, move)
+        return reward + (0.0 if done else gamma * values[successor])
 
-本实验采用价值迭代而不采用策略迭代，原因是两者虽然都收敛到最优策略，但价值迭代只需要一个循环，每一轮对全部状态执行一次最优性备份，每轮开销固定且实现简单；策略迭代的外层轮数通常更少，但每一轮都要把当前策略的策略评估迭代到收敛，因而引入一个内层循环和额外的停止条件。对本问题这样规模很小、转移确定的 MDP，价值迭代在实现与验证成本上更占优势。两种方法的对比见表~\ref{tab:vi-vs-pi}。
+    while True:
+        updated = {
+            state: max(action_value(state, move) for move in MOVES)
+            for state in maze.states
+        }
+        deltas.append(max(abs(updated[state] - values[state]) for state in maze.states))
+        values = updated
+        if deltas[-1] < tolerance:
+            break
 
-\begin{table}[htbp]
-  \centering
-  \caption{价值迭代与策略迭代的对比}
-  \label{tab:vi-vs-pi}
-  \begin{tabular}{p{2.4cm}p{5.4cm}p{5.4cm}}
-    \toprule
-    比较项 & 价值迭代 & 策略迭代 \\
-    \midrule
-    迭代结构 & 单层循环，直接迭代最优价值函数 & 外层策略改进 + 内层策略评估 \\
-    每轮开销 & $O(|\mathcal{S}||\mathcal{A}|)$，固定 & 需要一次（近似）策略评估 \\
-    收敛保证 & 压缩映射，误差按 $\gamma^k$ 几何衰减 & 有限步内收敛到最优策略 \\
-    停止条件 & 只需要 $\max_s|\Delta V(s)|<\varepsilon$ & 需要策略稳定与评估精度两个条件 \\
-    本实验 & 采用 & 作为替代方案未采用 \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-\subsection{算法流程}
-
-代码~\ref{lst:vi} 给出同步价值迭代的伪代码。输入为第 2 节建立的模型 $(\mathcal{S},\mathcal{A},f,R,\gamma)$ 与容差 $\varepsilon$，输出为最优价值函数与贪心策略。
-
-\begin{lstlisting}[style=pythonstyle,numbers=left,caption={同步价值迭代伪代码},label={lst:vi}]
-输入: 状态集 S, 动作集 A, 转移 f, 奖励 R, 折扣 gamma, 容差 eps
-输出: 价值表 V, 策略 pi
-
-V[s] <- 0                       # 初始化，终点天然为 0
-repeat
-    delta <- 0
-    for s in S:                 # 同步备份，先写入 V_new
-        if s == goal:
-            V_new[s] <- 0       # 吸收态，不自举
-        else:
-            V_new[s] <- max{ R(s,a) + gamma * V[f(s,a)] : a in A }
-        delta <- max(delta, |V_new[s] - V[s]|)
-    V <- V_new
-until delta < eps               # 停止准则
-
-for s in S, s != goal:          # 策略提取
-    pi[s] <- argmax{ R(s,a) + gamma * V[f(s,a)] : a in A }
-return V, pi
-\end{lstlisting}
-
-流程中的几个要点如下：
-\begin{enumerate}[nosep]
-  \item \textbf{初始化}：所有状态（含终点）的价值初始化为 $0$。取 $V_0\equiv 0$ 使得 $V_0\ge V^*$，迭代序列从上方单调下降逼近 $V^*$，并且 $V_0(s_g)=0$ 与终点的真实价值一致。
-  \item \textbf{最优性备份}：对每个非终点状态，用当前价值表计算四个动作的 $Q$ 值并取最大，得到该状态的新价值。终点不参与备份，恒为 $0$。
-  \item \textbf{同步更新}：一轮之内所有状态都读取旧价值表 $V_k$，结果写入新表 $V_{k+1}$，整轮结束后再整体替换。这样每次迭代都严格对应于算子 $\mathcal{T}$ 的一次作用，记录的最大更新量 $\delta_k$ 就是真实的最大范数差 $\|V_{k+1}-V_k\|_\infty$，可以直接用于误差估计；若改为就地更新（Gauss--Seidel），实践中收敛更快，但 $\delta_k$ 不再是算子意义下的干净上界，停止准则的误差推导会变弱。
-  \item \textbf{终止判断}：当一轮中所有状态的价值改变量都不超过 $\varepsilon$ 时停止迭代。
-  \item \textbf{策略提取}：收敛后只提取一次策略，避免迭代中期不可靠的价值影响最终结果。
-\end{enumerate}
-
-\subsection{收敛性与停止准则}
-
-记 $V_k$ 为第 $k$ 轮迭代后的价值表，$V_0\equiv 0$。由于所有非终点状态的单步奖励为 $-1$、终点价值为 $0$，价值始终落在区间 $\left[-\frac{1}{1-\gamma},\,0\right]$ 内，因此价值表不会溢出，$\mathcal{T}$ 的良好定义也得到了保证。
-
-在压缩性的基础上，迭代误差有先验界
-\[
-\|V_k-V^*\|_\infty\le\gamma^k\|V_1-V_0\|_\infty\le\gamma^k ,
-\]
-其中用到 $\|V_1-V_0\|_\infty=1$：因为 $V_1(s)=-1\ (s\ne s_g)$ 而 $V_0\equiv 0$。要使误差小于 $\varepsilon$，只需迭代轮数满足 $k\ge\dfrac{\log\bigl(\varepsilon(1-\gamma)/\gamma\bigr)}{\log\gamma}$。该估计只利用了最坏情况的初始误差，通常相当保守。
-
-实际实现使用的停止准则是后验的。设第 $k$ 轮的实测更新量为
-\[
-\delta_k=\|V_{k+1}-V_k\|_\infty=\max_{s\in\mathcal{S}}\bigl|V_{k+1}(s)-V_k(s)\bigr| ,
-\]
-则由压缩性可得标准误差界
-\[
-\|V_{k+1}-V^*\|_\infty\le\frac{\gamma}{1-\gamma}\,\delta_k .
-\]
-因此取 $\delta_k<\varepsilon$ 作为停止条件时，返回价值的误差不超过 $\dfrac{\gamma\varepsilon}{1-\gamma}$。本实验取 $\gamma=0.99$、$\varepsilon=10^{-8}$，于是价值误差上界约为 $9.9\times10^{-7}$，已经远小于迷宫问题的步数尺度，对策略的影响可以忽略。
-
-需要指出的是，\textbf{在本题的单位步代价与零初始化下，价值迭代会在有限轮内到达精确不动点}。设 $d(s)$ 为状态 $s$ 到终点的最短步数，$D=\max_{s}d(s)$。对 $d$ 做归纳可证：任何动作的 $Q$ 值都不超过 $-1$（因为即时奖励为 $-1$ 且价值非正），而 $V^*(s)=-\sum_{t=0}^{d(s)-1}\gamma^t\le-1$，因此朝终点方向的动作为最优动作；于是经过 $k$ 轮后所有满足 $d(s)\le k$ 的状态已经取到最优值。特别地，当 $k\ge D$ 时 $V_k=V^*$，再迭代一轮得到 $\delta_{D+1}=0$，算法判定收敛并返回精确的最优价值。这就是实验中迭代轮数约为 $D+1$、且最后一次更新量恰为 $0$ 的原因（见第 4 节）。对于一般的不确定 MDP，这一有限步精确收敛的性质不再成立，价值迭代只能给出 $\varepsilon$ 意义下的近似解。
-
-\subsection{策略提取}
-
-收敛后，对每个非终点状态 $s$ 按下式提取贪心动作：
-\[
-\pi^*(s)=\arg\max_{a\in\mathcal{A}}\Bigl\{R(s,a)+\gamma V\bigl(f(s,a)\bigr)\Bigr\}.
-\]
-终点为吸收态，不定义动作，故策略表中只包含 $|\mathcal{S}|-1$ 个状态。
-
-贪心策略的最优性来自策略改进定理：由 $\mathcal{T}$ 的不动点性质，对 $V^*$ 取贪心得到的策略满足 $V^{\pi^*}=V^*$。若价值只是近似收敛，记 $\|V_k-V^*\|_\infty\le\varepsilon$，则可以证明贪心策略满足
-\[
-\|V^{\pi_k}-V^*\|_\infty\le\frac{2\gamma\varepsilon}{1-\gamma},
-\]
-即策略的次优程度随价值误差线性下降；在本题的精确收敛情形下，该误差为零，返回的策略就是最优策略。
-
-当多个动作的 $Q$ 值相同（例如在开放区域中多个方向都能以相同步数到达终点）时，$\arg\max$ 的结果取决于动作的枚举顺序。本实验采用第 2 节定义的固定顺序，即北、东、南、西
-\[
-(-1,0),\quad (0,1),\quad (1,0),\quad (0,-1),
-\]
-并规定在取值相同时选取顺序最靠前的动作，从而使策略唯一、可复现，也保证了策略图在多次运行中保持一致。
-
-\subsection{复杂度分析}
-
-算法每一轮对 $|\mathcal{S}|$ 个状态、每个状态 $|\mathcal{A}|=4$ 个动作各做一次常数时间的备份，因此单轮时间复杂度为 $O(|\mathcal{S}||\mathcal{A}|)$。保持整个价值表与策略表各需 $O(|\mathcal{S}|)$ 空间，转移函数通过格点坐标即时计算，不需要预先存储 $|\mathcal{S}|\times|\mathcal{A}|$ 的转移表。
-
-总时间取决于迭代轮数 $K$：一般情形下由先验界给出 $K=O\!\left(\dfrac{\log(\varepsilon(1-\gamma)/\gamma)}{\log\gamma}\right)$，在 $\gamma=0.99$、$\varepsilon=10^{-8}$ 时约为 $2.3\times10^3$ 轮；而在本题中由于有限步精确收敛，$K\le D+1\le|\mathcal{S}|$，实测轮数为 $2\sim47$ 轮。加上一次长度不超过 $D+1$ 的策略提取与轨迹展开，总体复杂度仍为 $O(|\mathcal{S}||\mathcal{A}|)$ 量级，实验中最大规模的 15$\times$15 迷宫（102 个状态）单次求解耗时不足 5 ms。
-
-\subsection{实现要点}
-
-算法在 \texttt{maze.py} 与 \texttt{experiment.py} 中实现，核心迭代部分如代码~\ref{lst:core} 所示。实现上的主要考虑如下：
-\begin{itemize}[nosep]
-  \item \textbf{状态与动作编码}：状态用 (行, 列) 元组表示，只枚举非墙体格子，因此价值表与策略表都是 $O(|\mathcal{S}|)$ 的字典，墙体不占用任何条目；动作直接用行列位移表示，与第 2 节的 $\mathcal{A}$ 一致。
-  \item \textbf{转移与奖励}：转移函数 $f$ 与奖励 $R$ 合并实现在 \texttt{Maze.step} 中，一次调用返回（后继状态, 奖励, 是否终止）三元组。若目标格是墙体或越界，后继取原状态且奖励仍为 $-1$，从而避免把撞墙当作可以无限重复的“免费动作”。
-  \item \textbf{终点处理}：\texttt{step} 在终点直接返回 $(s_g,0,\text{True})$，备份时对终止情形取 $0$ 作为后续价值，与代码~\ref{lst:vi} 中 $V(s_g)=0$ 的写法完全对应。
-  \item \textbf{同步更新与误差记录}：每轮先把结果写入新字典再整体替换，同时记录 $\delta_k$，既保证了与压缩映射理论的一致性，也为第 4 节的收敛曲线提供了数据。
-  \item \textbf{平局与可复现性}：策略提取使用带固定顺序的 \texttt{max}（Python 的 \texttt{max} 在并列时返回第一个元素），使平局时的动作选择确定，便于复现实验与比较不同迷宫的结果。
-  \item \textbf{数值安全}：$\gamma<1$ 保证价值有界，迭代不会发散；同时以 $\delta_k<\varepsilon$ 作为唯一停止条件，避免使用固定轮数而带来的精度不确定性。
-\end{itemize}
-
-\begin{lstlisting}[style=pythonstyle,numbers=left,caption={核心迭代实现（摘自 \texttt{maze.py}）},label={lst:core}]
-values = dict.fromkeys(maze.states, 0.0)   # V_0 = 0
-deltas = []
-while True:
-    updated = {                            # 同步备份
-        state: max(action_value(state, move) for move in MOVES)
+    policy = {
+        state: max(MOVES, key=lambda move: action_value(state, move))
         for state in maze.states
+        if state != maze.goal
     }
-    deltas.append(max(abs(updated[s] - values[s])
-                      for s in maze.states))
-    values = updated
-    if deltas[-1] < tolerance:
-        break
 \end{lstlisting}
 
+\clearpage
 \section{实验结果}
 
+除折扣因子的对比实验外，以下实验均使用 $\gamma=0.99$、停止阈值 $10^{-8}$，价值初始值为 $0$。每张迷宫横图从左到右依次展示路径、策略和状态价值：橙色格子表示经过的路径，白色箭头表示行进方向，蓝色箭头表示各位置选择的动作，右图中的数值表示对应状态的价值。路径长度另用广度优先搜索进行核对。
+
+\subsection{主实验结果}
+
+作业给定的迷宫为 $8\times8$，共有 27 个可通行状态。价值迭代在 24 轮后停止，得到的路径从起点出发，绕过中间的障碍后到达终点，共 15 步，与广度优先搜索得到的最短路径长度一致。由于每步奖励为 $-1$，这条路径的未折扣回报为 $-15$，起点价值为 $-13.994165$。
+
+\begin{center}
+  \includegraphics[width=\linewidth]{figures/assignment_triptych.pdf}
+\end{center}
+
+策略图不仅给出了起点到终点的行进方向，也给出了路径之外各个位置应采取的动作。价值图中，沿最短路线越接近终点，价值越接近 $0$。这里的 24 轮迭代多于路径的 15 步，是因为算法每轮更新整张价值表；该迷宫中距离终点最远的状态需要 23 步才能到达终点，直到第 24 轮检查时，所有状态的价值才都不再变化。
+
+\Needspace{12\baselineskip}
+\subsection{折扣因子对求解的影响}
+
+为了观察复杂路径下的求解结果，我另外定义了 \texttt{complex\_large} 测例，将网格扩大到 $31\times31$，包含 465 个可通行状态，并加入多处分支、死胡同和回路。起终点的曼哈顿距离为 56，但墙壁使最短可行路径达到 112 步。算法经过 113 轮更新后得到这条最短路径，起点价值为 $-67.555447$。下图依次展示路径、策略和价值分布。
+
+\begin{center}
+  \includegraphics[width=\linewidth]{figures/complex_large_triptych.pdf}
+\end{center}
+
+固定其余条件后，我比较了从 $0.1$ 到 $0.99$ 的 12 个折扣因子。下图的柱高表示满足停止条件所需的迭代轮数；红色 Failed 表示所得策略无法到达终点，蓝色 Success 表示能够到达终点。
+
+\begin{center}
+  \includegraphics[width=\linewidth]{../results/complex_large/gamma_sweep/gamma_iterations.pdf}
+\end{center}
+
+本次测试中，$\gamma\le0.8$ 的各组均未能到达终点，其中 $\gamma=0.1$、$0.5$、$0.8$ 分别在第 9、28、84 轮停止。较小的 $\gamma$ 使远期奖励的影响随 $\gamma^t$ 迅速衰减，每轮价值变化很快低于停止阈值 $10^{-8}$，而终点信息此时尚未传播到起点。起点四个动作的估计价值仍然相同，程序按枚举顺序选择向上移动，撞墙后留在原地，之后又重复同一动作。因此，这些失败来自长路径上的折扣衰减与固定停止阈值共同造成的提前停止。
+
+当 $\gamma$ 为 $0.85$、$0.9$、$0.95$ 和 $0.99$ 时，程序均经过 113 轮更新得到 112 步的最短路径。作为对照，仅将 $\gamma=0.8$ 的停止阈值收紧到 $10^{-12}$，程序也能得到同一长度的最短路径，验证了停止阈值对该组结果的影响。当 $\gamma$ 更小时，动作价值之间的差异还可能被浮点舍入抹去，因此仅收紧停止阈值也未必足够。
+
+\Needspace{15\baselineskip}
+\subsection{其他扩展测例}
+
+我还设计了以下测例，分别检查不同迷宫结构对结果的影响。它们的路径长度都与广度优先搜索一致，汇总如下；随后给出每个测例的设计目的和三图对照。
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+  \toprule
+  测例 & 网格大小 & 状态数 & 路径步数 & 迭代轮数 \\
+  \midrule
+  \texttt{corridor}  & $3\times11$  & 9   & 8  & 9  \\
+  \texttt{open\_room} & $6\times9$  & 28  & 9  & 10 \\
+  \texttt{detour}    & $7\times9$   & 31  & 14 & 15 \\
+  \texttt{dead\_ends} & $9\times13$ & 47  & 16 & 21 \\
+  \texttt{loop}      & $7\times9$   & 20  & 10 & 11 \\
+  \texttt{larger}    & $15\times15$ & 102 & 40 & 47 \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\begin{minipage}{\linewidth}
+\textbf{（1）直线走廊：\texttt{corridor}}\par\smallskip
+这个测例没有岔路，用来观察价值能否沿通道逐步传播。策略始终朝终点方向移动，得到长度为 8 的路径，9 轮后停止。各位置的价值随剩余步数变化，起点价值为 $-7.725531$，与沿这条走廊累计得到的折扣回报一致。
+\begin{center}
+  \includegraphics[width=\linewidth]{figures/corridor_triptych.pdf}
+\end{center}
+\end{minipage}\par\medskip
+
+\noindent\begin{minipage}{\linewidth}
+\textbf{（2）开放区域：\texttt{open\_room}}\par\smallskip
+去掉内部障碍后，起点到终点存在多条等长的最短路径，可以检查动作价值并列时的策略选择。两点的行列距离之和为 9，求得的路径也为 9 步，10 轮后停止。图中展示的是多个最优解中的一个，其具体走向由代码中的动作枚举顺序决定。
+\begin{center}
+  \includegraphics[width=\linewidth]{figures/open_room_triptych.pdf}
+\end{center}
+\end{minipage}\par\medskip
+
+\noindent\begin{minipage}{\linewidth}
+\textbf{（3）绕路障碍：\texttt{detour}}\par\smallskip
+起点与终点位于同一行，但中间的墙只能从下方绕过，用来检查策略是否会为后续收益选择暂时远离终点的动作。两点的曼哈顿距离仅为 6，实际最短路径却需要 14 步。结果正确地先向下绕过墙体，再向上到达终点，15 轮后价值稳定。
+\begin{center}
+  \includegraphics[width=\linewidth]{figures/detour_triptych.pdf}
+\end{center}
+\end{minipage}\par\medskip
+
+\noindent\begin{minipage}{\linewidth}
+\textbf{（4）多条死胡同：\texttt{dead\_ends}}\par\smallskip
+这个测例加入了走入后必须返回的支路，用来检查价值是否能反映无效绕行的代价。最终从起点出发的策略沿 16 步最短路径到达终点；死胡同内部的箭头则指向出口，没有把智能体困在支路中。由于最远状态到终点仍需 20 步，整张价值表经过 21 轮才稳定。
+\begin{center}
+  \includegraphics[width=\linewidth]{figures/dead_ends_triptych.pdf}
+\end{center}
+\end{minipage}\par\medskip
+
+\noindent\begin{minipage}{\linewidth}
+\textbf{（5）环形通道：\texttt{loop}}\par\smallskip
+起点与终点之间有两条等长的绕行路线，用来检查环境存在回路时，最终策略是否仍会朝终点推进。算法选择了其中一条长度为 10 的最短路线，11 轮后停止。虽然迷宫结构有环，沿得到的策略执行时并没有出现循环。
+\begin{center}
+  \includegraphics[width=\linewidth]{figures/loop_triptych.pdf}
+\end{center}
+\end{minipage}\par\medskip
+
+\noindent\begin{minipage}{\linewidth}
+\textbf{（6）组合结构：\texttt{larger}}\par\smallskip
+最后将岔路、回路和狭窄通道放入 $15\times15$ 的迷宫，检查多种结构同时出现时的结果。起终点的曼哈顿距离只有 4，但墙壁使最短可行路径达到 40 步。算法求得了这条最短路径，起点价值为 $-33.102824$；由于部分支路距离终点更远，全局价值经过 47 轮才稳定。
+\begin{center}
+  \includegraphics[width=\linewidth]{figures/larger_triptych.pdf}
+\end{center}
+\end{minipage}\par\medskip
+
 \section{总结}
+通过本次实验，我进一步理解了 MDP 的建模过程，以及 Value Iteration 如何通过迭代更新状态价值求得策略。将数学公式落实到代码，并结合不同测例观察结果，使我对状态、动作、奖励和价值函数之间的关系有了更直观的认识，也为后续学习强化学习算法打下了基础。
 
 \end{document}

@@ -53,6 +53,7 @@ class MazeFileTests(unittest.TestCase):
         expected_lengths = {
             "adjacent": 1,
             "assignment": 15,
+            "complex_large": 112,
             "corridor": 8,
             "dead_ends": 16,
             "detour": 14,

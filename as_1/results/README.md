@@ -16,6 +16,7 @@ and entry into the terminal goal. The goal value is zero.
 | --- | --- | ---: | ---: | ---: | ---: | --- |
 | adjacent | 3 × 4 | 2 | 2 | 1 | -1.000000 | [Summary](adjacent/summary.txt) · [Path](adjacent/path.png) · [JSON](adjacent/results.json) |
 | assignment | 8 × 8 | 27 | 24 | 15 | -13.994165 | [Summary](assignment/summary.txt) · [Path](assignment/path.png) · [JSON](assignment/results.json) |
+| complex_large | 31 × 31 | 465 | 113 | 112 | -67.555447 | [Summary](complex_large/summary.txt) · [Path](complex_large/path.png) · [JSON](complex_large/results.json) |
 | corridor | 3 × 11 | 9 | 9 | 8 | -7.725531 | [Summary](corridor/summary.txt) · [Path](corridor/path.png) · [JSON](corridor/results.json) |
 | dead_ends | 9 × 13 | 47 | 21 | 16 | -14.854223 | [Summary](dead_ends/summary.txt) · [Path](dead_ends/path.png) · [JSON](dead_ends/results.json) |
 | detour | 7 × 9 | 31 | 15 | 14 | -13.125419 | [Summary](detour/summary.txt) · [Path](detour/path.png) · [JSON](detour/results.json) |

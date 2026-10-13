@@ -5,7 +5,7 @@ from pathlib import Path
 import matplotlib
 from matplotlib.cm import ScalarMappable
 from matplotlib.colors import Normalize
-from matplotlib.patches import Patch, Rectangle
+from matplotlib.patches import FancyArrow, Patch, Rectangle
 from matplotlib.ticker import MaxNLocator
 from matplotlib.transforms import ScaledTranslation
 
@@ -20,6 +20,7 @@ FLOOR_COLOR = "#FFFFFF"
 START_COLOR = "#DDEDFB"
 GOAL_COLOR = "#F6D7CE"
 PATH_COLOR = CORAL
+ROUTE_COLOR = "#ED8A23"
 TEXT_COLOR = "#171717"
 ACCENT_COLOR = BLUE
 MUTED_COLOR = "#555555"
@@ -70,65 +71,143 @@ STYLE = {
 }
 
 
-def maze_figure(maze, title, corner_labels=False):
-    """Draw the maze in the solver's row/column coordinates; return (fig, ax)."""
-    rows, cols = len(maze), len(maze[0])
-    grid_width = max(2.8, cols * 0.42)
-    grid_height = grid_width * rows / cols
-    width, height = grid_width + 0.60, grid_height + 1.20
-    fig, ax = plt.subplots(figsize=(width, height))
-    # Keep cells readable and reserve fixed physical space for labels and legends.
-    fig.subplots_adjust(
-        left=0.46 / width, right=1 - 0.14 / width,
-        bottom=0.85 / height, top=1 - 0.35 / height,
-    )
+def draw_maze_cells(ax, maze, *, label_size=12, grid_linewidth=0.65, draw_endpoints=True):
+    """Draw maze cells and optional corner labels without configuring the axes."""
     for row, line in enumerate(maze):
         for col, cell in enumerate(line):
             ax.add_patch(
                 Rectangle(
                     (col, row), 1, 1, facecolor=CELL_COLORS.get(cell, FLOOR_COLOR),
-                    edgecolor="#888888", linewidth=0.65, zorder=0,
+                    edgecolor="#888888", linewidth=grid_linewidth, zorder=0,
                 )
             )
-            if cell in "SG":
-                offset = 0.13 if corner_labels else 0.5
+            if draw_endpoints and cell in "SG":
                 ax.text(
-                    col + offset, row + offset, cell,
-                    ha="left" if corner_labels else "center",
-                    va="top" if corner_labels else "center",
-                    fontsize=7 if corner_labels else 10,
+                    col + 0.08, row + 0.08, cell, ha="left", va="top",
+                    fontsize=label_size,
                     fontweight="bold", color=TEXT_COLOR, zorder=5,
                 )
 
+
+def _draw_cell_arrow(ax, row, col, dr, dc, color):
+    """Use cell-space geometry so arrows retain their weight at any output size."""
+    ax.add_patch(FancyArrow(
+        col + 0.5 - 0.34 * dc, row + 0.5 - 0.34 * dr,
+        0.68 * dc, 0.68 * dr, width=0.10,
+        head_width=0.38, head_length=0.24, length_includes_head=True,
+        facecolor=color, edgecolor="none", linewidth=0, zorder=3,
+    ))
+
+
+def draw_path_cells(ax, result, *, label_size=12, grid_linewidth=0.65):
+    """Fill the visited cells orange and show each move with a white arrow."""
+    path = result["path"]
+    for row, col in path:
+        ax.add_patch(Rectangle(
+            (col, row), 1, 1, facecolor=ROUTE_COLOR,
+            edgecolor="#888888", linewidth=grid_linewidth, zorder=1,
+        ))
+    for (row, col), (next_row, next_col) in zip(path, path[1:]):
+        _draw_cell_arrow(ax, row, col, next_row - row, next_col - col, "white")
+    for row, col in path:
+        cell = result["maze"][row][col]
+        if cell == "S":
+            ax.text(
+                col + 0.08, row + 0.08, "S", ha="left", va="top",
+                fontsize=label_size, fontweight="bold", color="white", zorder=5,
+            )
+        elif cell == "G":
+            ax.text(
+                col + 0.5, row + 0.5, "G", ha="center", va="center",
+                fontsize=label_size, fontweight="bold", color="white", zorder=5,
+            )
+
+
+def draw_policy_arrows(ax, result):
+    """Draw the selected action in every nonterminal state."""
+    for state in result["states"]:
+        if state["action"] is not None:
+            dr, dc = state["action"]
+            _draw_cell_arrow(ax, state["row"], state["col"], dr, dc, BLUE)
+
+
+def draw_value_cells(ax, result, *, font_size=12, grid_linewidth=0.65):
+    """Draw complete two-decimal state values and return their color mapping."""
+    values = [state["value"] for state in result["states"]]
+    norm = Normalize(vmin=min(values), vmax=max(values))
+    cmap = plt.get_cmap("Reds")
+    for state in result["states"]:
+        row, col, value = state["row"], state["col"], state["value"]
+        color = cmap(norm(value))
+        text_color = "white" if norm(value) > 0.60 else TEXT_COLOR
+        ax.add_patch(Rectangle(
+            (col, row), 1, 1, facecolor=color,
+            edgecolor="#888888", linewidth=grid_linewidth, zorder=1,
+        ))
+        ax.text(
+            col + 0.5, row + 0.5, f"{value:.2f}", ha="center", va="center",
+            fontsize=font_size, color=text_color, zorder=3,
+        )
+    return norm, cmap
+
+
+def maze_figure(maze, title, corner_labels=False, *, draw_endpoints=True, colorbar_space=False):
+    """Draw a spacious maze with fixed room for labels, legend, and colorbar."""
+    rows, cols = len(maze), len(maze[0])
+    grid_width = max(3.8, cols * 0.50)
+    grid_height = grid_width * rows / cols
+    left, bottom, top = 0.62, 1.04, 0.52
+    right = 1.10 if colorbar_space else 0.18
+    width, height = left + grid_width + right, bottom + grid_height + top
+    fig = plt.figure(figsize=(width, height))
+    ax = fig.add_axes([left / width, bottom / height, grid_width / width, grid_height / height])
+    draw_maze_cells(ax, maze, draw_endpoints=draw_endpoints and corner_labels)
+    if draw_endpoints and not corner_labels:
+        for row, line in enumerate(maze):
+            for col, cell in enumerate(line):
+                if cell in "SG":
+                    ax.text(
+                        col + 0.5, row + 0.5, cell, ha="center", va="center",
+                        fontsize=14, fontweight="bold", color=TEXT_COLOR, zorder=5,
+                    )
     ax.set_xlim(0, cols)
     ax.set_ylim(rows, 0)
     ax.set_aspect("equal")
     ax.set_xticks([col + 0.5 for col in range(cols)], range(cols))
     ax.set_yticks([row + 0.5 for row in range(rows)], range(rows))
-    ax.set_xlabel("Column")
-    ax.set_ylabel("Row")
-    ax.tick_params(length=0, pad=3)
+    ax.set_xlabel("Column", fontsize=13)
+    ax.set_ylabel("Row", fontsize=13)
+    ax.tick_params(length=0, pad=4, labelsize=11)
     for spine in ax.spines.values():
         spine.set_visible(True)
         spine.set_linewidth(1.1)
-    ax.set_title(title, pad=7)
+    ax.set_title(title, pad=12, fontsize=15)
     return fig, ax
 
 
-def add_legend(ax):
+def add_legend(ax, *, path=False):
     """Explain the maze colors below the axes."""
     legend_transform = ax.transAxes + ScaledTranslation(
-        0, -0.48, ax.figure.dpi_scale_trans
+        0, -0.56, ax.figure.dpi_scale_trans
     )
-    ax.legend(
-        handles=[
-            Patch(facecolor=WALL_COLOR, edgecolor="#888888", linewidth=0.65, label="Wall"),
-            Patch(facecolor=FLOOR_COLOR, edgecolor="#888888", linewidth=0.65, label="Corridor"),
+    handles = [
+        Patch(facecolor=WALL_COLOR, edgecolor="#888888", linewidth=0.65, label="Wall"),
+        Patch(facecolor=FLOOR_COLOR, edgecolor="#888888", linewidth=0.65, label="Corridor"),
+    ]
+    if path:
+        handles.append(Patch(
+            facecolor=ROUTE_COLOR, edgecolor="#888888", linewidth=0.65,
+            label="Path (S to G)",
+        ))
+    else:
+        handles.extend([
             Patch(facecolor=START_COLOR, edgecolor="#888888", linewidth=0.65, label="Start (S)"),
             Patch(facecolor=GOAL_COLOR, edgecolor="#888888", linewidth=0.65, label="Goal (G)"),
-        ],
+        ])
+    ax.legend(
+        handles=handles,
         loc="upper center", bbox_to_anchor=(0.5, 0), bbox_transform=legend_transform,
-        ncol=4, frameon=False, fontsize=7,
+        ncol=len(handles), frameon=False, fontsize=10,
         handlelength=0.9, handletextpad=0.35, columnspacing=0.75,
     )
 
@@ -144,45 +223,18 @@ def plot_policy(result):
     fig, ax = maze_figure(
         result["maze"], rf"Optimal policy ($\gamma={gamma:g}$)", corner_labels=True
     )
-    for state in result["states"]:
-        if state["action"] is None:
-            continue
-        dr, dc = state["action"]
-        x, y = state["col"] + 0.5, state["row"] + 0.5
-        ax.annotate(
-            "", xy=(x + 0.28 * dc, y + 0.28 * dr),
-            xytext=(x - 0.24 * dc, y - 0.24 * dr),
-            arrowprops={
-                "arrowstyle": "-|>", "color": BLUE,
-                "lw": 1.6, "mutation_scale": 10,
-            },
-            zorder=3,
-        )
+    draw_policy_arrows(ax, result)
     add_legend(ax)
     return fig
 
 
 def plot_path(result):
-    path = result["path"]
     steps = "step" if result["path_length"] == 1 else "steps"
     fig, ax = maze_figure(
-        result["maze"], f"Optimal path ({result['path_length']} {steps})", corner_labels=True
+        result["maze"], f"Optimal path ({result['path_length']} {steps})", draw_endpoints=False
     )
-    ax.plot(
-        [col + 0.5 for _, col in path], [row + 0.5 for row, _ in path],
-        color=PATH_COLOR, linewidth=2.2, marker="o", markersize=4.1,
-        markerfacecolor="white", markeredgewidth=1.1, zorder=2,
-    )
-    for index, (row, col) in enumerate(path):
-        ax.text(
-            col + 0.76, row + 0.80, str(index), color=TEXT_COLOR,
-            fontsize=7, ha="center", va="center", zorder=4,
-        )
-    add_legend(ax)
-    fig.text(
-        0.54, 0.065 / fig.get_figheight(), "Numbers indicate time steps, starting at 0.",
-        ha="center", fontsize=7, color=MUTED_COLOR,
-    )
+    draw_path_cells(ax, result)
+    add_legend(ax, path=True)
     return fig
 
 
@@ -190,41 +242,23 @@ def plot_values(result):
     maze = result["maze"]
     gamma = result["parameters"]["gamma"]
     fig, ax = maze_figure(
-        maze, rf"Optimal state values ($\gamma={gamma:g}$)", corner_labels=True
+        maze, rf"Optimal state values ($\gamma={gamma:g}$)",
+        draw_endpoints=False, colorbar_space=True,
     )
-    values = [state["value"] for state in result["states"]]
-    norm = Normalize(vmin=min(values), vmax=max(values))
-    cmap = plt.get_cmap("Reds")
-    for state in result["states"]:
-        row, col, value = state["row"], state["col"], state["value"]
-        color = cmap(norm(value))
-        text_color = "white" if norm(value) > 0.60 else TEXT_COLOR
-        ax.add_patch(
-            Rectangle(
-                (col, row), 1, 1, facecolor=color,
-                edgecolor="#888888", linewidth=0.65, zorder=1,
-            )
-        )
-        ax.text(
-            col + 0.5, row + 0.55, f"{value:.2f}", ha="center",
-            va="center", fontsize=6.6, color=text_color, zorder=3,
-        )
-        if maze[row][col] in "SG":
-            # Cover the base label with a color matched to the value cell.
-            ax.text(
-                col + 0.13, row + 0.13, maze[row][col],
-                ha="left", va="top", fontsize=6.5, fontweight="bold",
-                color=text_color, zorder=6,
-                bbox={"facecolor": color, "edgecolor": "none", "pad": 0.1},
-            )
+    norm, cmap = draw_value_cells(ax, result)
+    position = ax.get_position()
+    colorbar_ax = fig.add_axes([
+        position.x1 + 0.16 / fig.get_figwidth(), position.y0,
+        0.20 / fig.get_figwidth(), position.height,
+    ])
     colorbar = fig.colorbar(
-        ScalarMappable(norm=norm, cmap=cmap), ax=ax, fraction=0.046, pad=0.035
+        ScalarMappable(norm=norm, cmap=cmap), cax=colorbar_ax
     )
-    colorbar.set_label(r"State value $V^*(s)$", labelpad=4)
+    colorbar.set_label(r"State value $V^*(s)$", labelpad=7, fontsize=13)
     colorbar.solids.set_rasterized(False)
     colorbar.solids.set_edgecolor("face")
     colorbar.outline.set_linewidth(0.9)
-    colorbar.ax.tick_params(width=0.9, length=2.5)
+    colorbar.ax.tick_params(width=0.9, length=3, labelsize=11)
     return fig
 
 
