@@ -254,8 +254,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 40
+      ]
     },
     {
       "row": 1,
@@ -264,8 +263,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 39
+      ]
     },
     {
       "row": 1,
@@ -274,8 +272,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 38
+      ]
     },
     {
       "row": 1,
@@ -284,8 +281,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 37
+      ]
     },
     {
       "row": 1,
@@ -294,8 +290,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 36
+      ]
     },
     {
       "row": 1,
@@ -304,8 +299,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 34
+      ]
     },
     {
       "row": 1,
@@ -314,8 +308,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 35
+      ]
     },
     {
       "row": 1,
@@ -324,8 +317,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 36
+      ]
     },
     {
       "row": 1,
@@ -334,8 +326,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 37
+      ]
     },
     {
       "row": 1,
@@ -344,8 +335,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 38
+      ]
     },
     {
       "row": 1,
@@ -354,8 +344,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 39
+      ]
     },
     {
       "row": 1,
@@ -364,8 +353,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 40
+      ]
     },
     {
       "row": 2,
@@ -374,8 +362,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 35
+      ]
     },
     {
       "row": 2,
@@ -384,8 +371,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 33
+      ]
     },
     {
       "row": 2,
@@ -394,8 +380,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 39
+      ]
     },
     {
       "row": 3,
@@ -404,8 +389,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 2
+      ]
     },
     {
       "row": 3,
@@ -414,15 +398,13 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 1
+      ]
     },
     {
       "row": 3,
       "col": 3,
       "value": 0.0,
-      "action": null,
-      "distance_to_goal": 0
+      "action": null
     },
     {
       "row": 3,
@@ -431,8 +413,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 34
+      ]
     },
     {
       "row": 3,
@@ -441,8 +422,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 33
+      ]
     },
     {
       "row": 3,
@@ -451,8 +431,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 32
+      ]
     },
     {
       "row": 3,
@@ -461,8 +440,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 31
+      ]
     },
     {
       "row": 3,
@@ -471,8 +449,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 30
+      ]
     },
     {
       "row": 3,
@@ -481,8 +458,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 31
+      ]
     },
     {
       "row": 3,
@@ -491,8 +467,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 32
+      ]
     },
     {
       "row": 3,
@@ -501,8 +476,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 38
+      ]
     },
     {
       "row": 4,
@@ -511,8 +485,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 3
+      ]
     },
     {
       "row": 4,
@@ -521,8 +494,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 29
+      ]
     },
     {
       "row": 4,
@@ -531,8 +503,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 33
+      ]
     },
     {
       "row": 4,
@@ -541,8 +512,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 37
+      ]
     },
     {
       "row": 5,
@@ -551,8 +521,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 4
+      ]
     },
     {
       "row": 5,
@@ -561,8 +530,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 22
+      ]
     },
     {
       "row": 5,
@@ -571,8 +539,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 23
+      ]
     },
     {
       "row": 5,
@@ -581,8 +548,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 24
+      ]
     },
     {
       "row": 5,
@@ -591,8 +557,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 26
+      ]
     },
     {
       "row": 5,
@@ -601,8 +566,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 27
+      ]
     },
     {
       "row": 5,
@@ -611,8 +575,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 28
+      ]
     },
     {
       "row": 5,
@@ -621,8 +584,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 34
+      ]
     },
     {
       "row": 5,
@@ -631,8 +593,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 35
+      ]
     },
     {
       "row": 5,
@@ -641,8 +602,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 36
+      ]
     },
     {
       "row": 6,
@@ -651,8 +611,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 5
+      ]
     },
     {
       "row": 6,
@@ -661,8 +620,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 21
+      ]
     },
     {
       "row": 6,
@@ -671,8 +629,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 23
+      ]
     },
     {
       "row": 6,
@@ -681,8 +638,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 25
+      ]
     },
     {
       "row": 6,
@@ -691,8 +647,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 35
+      ]
     },
     {
       "row": 6,
@@ -701,8 +656,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 37
+      ]
     },
     {
       "row": 7,
@@ -711,8 +665,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 6
+      ]
     },
     {
       "row": 7,
@@ -721,8 +674,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 20
+      ]
     },
     {
       "row": 7,
@@ -731,8 +683,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 21
+      ]
     },
     {
       "row": 7,
@@ -741,8 +692,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 22
+      ]
     },
     {
       "row": 7,
@@ -751,8 +701,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 23
+      ]
     },
     {
       "row": 7,
@@ -761,8 +710,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 24
+      ]
     },
     {
       "row": 7,
@@ -771,8 +719,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 25
+      ]
     },
     {
       "row": 7,
@@ -781,8 +728,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 26
+      ]
     },
     {
       "row": 7,
@@ -791,8 +737,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 36
+      ]
     },
     {
       "row": 7,
@@ -801,8 +746,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 38
+      ]
     },
     {
       "row": 8,
@@ -811,8 +755,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 7
+      ]
     },
     {
       "row": 8,
@@ -821,8 +764,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 19
+      ]
     },
     {
       "row": 8,
@@ -831,8 +773,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 37
+      ]
     },
     {
       "row": 8,
@@ -841,8 +782,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 39
+      ]
     },
     {
       "row": 9,
@@ -851,8 +791,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 8
+      ]
     },
     {
       "row": 9,
@@ -861,8 +800,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 18
+      ]
     },
     {
       "row": 9,
@@ -871,8 +809,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 19
+      ]
     },
     {
       "row": 9,
@@ -881,8 +818,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 20
+      ]
     },
     {
       "row": 9,
@@ -891,8 +827,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 21
+      ]
     },
     {
       "row": 9,
@@ -901,8 +836,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 22
+      ]
     },
     {
       "row": 9,
@@ -911,8 +845,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 40
+      ]
     },
     {
       "row": 9,
@@ -921,8 +854,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 39
+      ]
     },
     {
       "row": 9,
@@ -931,8 +863,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 38
+      ]
     },
     {
       "row": 9,
@@ -941,8 +872,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 40
+      ]
     },
     {
       "row": 10,
@@ -951,8 +881,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 9
+      ]
     },
     {
       "row": 10,
@@ -961,8 +890,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 17
+      ]
     },
     {
       "row": 10,
@@ -971,8 +899,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 19
+      ]
     },
     {
       "row": 10,
@@ -981,8 +908,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 23
+      ]
     },
     {
       "row": 10,
@@ -991,8 +917,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 41
+      ]
     },
     {
       "row": 10,
@@ -1001,8 +926,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 41
+      ]
     },
     {
       "row": 11,
@@ -1011,8 +935,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 10
+      ]
     },
     {
       "row": 11,
@@ -1021,8 +944,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 16
+      ]
     },
     {
       "row": 11,
@@ -1031,8 +953,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 17
+      ]
     },
     {
       "row": 11,
@@ -1041,8 +962,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 18
+      ]
     },
     {
       "row": 11,
@@ -1051,8 +971,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 24
+      ]
     },
     {
       "row": 11,
@@ -1061,8 +980,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 42
+      ]
     },
     {
       "row": 11,
@@ -1071,8 +989,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 43
+      ]
     },
     {
       "row": 11,
@@ -1081,8 +998,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 44
+      ]
     },
     {
       "row": 11,
@@ -1091,8 +1007,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 42
+      ]
     },
     {
       "row": 12,
@@ -1101,8 +1016,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 11
+      ]
     },
     {
       "row": 12,
@@ -1111,8 +1025,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 15
+      ]
     },
     {
       "row": 12,
@@ -1121,8 +1034,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 17
+      ]
     },
     {
       "row": 12,
@@ -1131,8 +1043,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 25
+      ]
     },
     {
       "row": 12,
@@ -1141,8 +1052,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 45
+      ]
     },
     {
       "row": 12,
@@ -1151,8 +1061,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 43
+      ]
     },
     {
       "row": 13,
@@ -1161,8 +1070,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 12
+      ]
     },
     {
       "row": 13,
@@ -1171,8 +1079,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 13
+      ]
     },
     {
       "row": 13,
@@ -1181,8 +1088,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 14
+      ]
     },
     {
       "row": 13,
@@ -1191,8 +1097,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 15
+      ]
     },
     {
       "row": 13,
@@ -1201,8 +1106,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 16
+      ]
     },
     {
       "row": 13,
@@ -1211,8 +1115,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 26
+      ]
     },
     {
       "row": 13,
@@ -1221,8 +1124,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 27
+      ]
     },
     {
       "row": 13,
@@ -1231,8 +1133,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 28
+      ]
     },
     {
       "row": 13,
@@ -1241,8 +1142,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 46
+      ]
     },
     {
       "row": 13,
@@ -1251,8 +1151,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 45
+      ]
     },
     {
       "row": 13,
@@ -1261,8 +1160,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 44
+      ]
     }
   ],
   "path": [
@@ -1639,9 +1537,6 @@
   "undiscounted_return": -40.0,
   "discounted_return": -33.102824143031945,
   "start_value": -33.10282414303194,
-  "bfs_shortest_path_length": 40,
-  "max_value_error": 7.105427357601002e-15,
-  "verified": true,
   "case": "larger",
   "input_file": "cases/larger.in",
   "gamma_comparison": [
@@ -1650,24 +1545,21 @@
       "iterations": 47,
       "path_length": 40,
       "start_value": -9.852191170585655,
-      "runtime_seconds": 0.00387804199999664,
-      "verified": true
+      "runtime_seconds": 0.00387804199999664
     },
     {
       "gamma": 0.95,
       "iterations": 47,
       "path_length": 40,
       "start_value": -17.42975686869792,
-      "runtime_seconds": 0.004054791999806184,
-      "verified": true
+      "runtime_seconds": 0.004054791999806184
     },
     {
       "gamma": 0.99,
       "iterations": 47,
       "path_length": 40,
       "start_value": -33.10282414303194,
-      "runtime_seconds": 0.004163707999396138,
-      "verified": true
+      "runtime_seconds": 0.004163707999396138
     }
   ]
 }

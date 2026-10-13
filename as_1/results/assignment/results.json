@@ -155,8 +155,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 13
+      ]
     },
     {
       "row": 1,
@@ -165,8 +164,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 12
+      ]
     },
     {
       "row": 1,
@@ -175,8 +173,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 11
+      ]
     },
     {
       "row": 1,
@@ -185,8 +182,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 10
+      ]
     },
     {
       "row": 1,
@@ -195,8 +191,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 9
+      ]
     },
     {
       "row": 1,
@@ -205,8 +200,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 8
+      ]
     },
     {
       "row": 2,
@@ -215,8 +209,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 15
+      ]
     },
     {
       "row": 2,
@@ -225,8 +218,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 14
+      ]
     },
     {
       "row": 2,
@@ -235,8 +227,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 11
+      ]
     },
     {
       "row": 2,
@@ -245,8 +236,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 7
+      ]
     },
     {
       "row": 3,
@@ -255,8 +245,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 15
+      ]
     },
     {
       "row": 3,
@@ -265,8 +254,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 16
+      ]
     },
     {
       "row": 3,
@@ -275,8 +263,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 5
+      ]
     },
     {
       "row": 3,
@@ -285,8 +272,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 6
+      ]
     },
     {
       "row": 4,
@@ -295,8 +281,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 17
+      ]
     },
     {
       "row": 4,
@@ -305,8 +290,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 18
+      ]
     },
     {
       "row": 4,
@@ -315,8 +299,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 4
+      ]
     },
     {
       "row": 5,
@@ -325,8 +308,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 23
+      ]
     },
     {
       "row": 5,
@@ -335,8 +317,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 19
+      ]
     },
     {
       "row": 5,
@@ -345,8 +326,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 3
+      ]
     },
     {
       "row": 5,
@@ -355,8 +335,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 2
+      ]
     },
     {
       "row": 6,
@@ -365,8 +344,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 22
+      ]
     },
     {
       "row": 6,
@@ -375,8 +353,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 21
+      ]
     },
     {
       "row": 6,
@@ -385,8 +362,7 @@
       "action": [
         -1,
         0
-      ],
-      "distance_to_goal": 20
+      ]
     },
     {
       "row": 6,
@@ -395,8 +371,7 @@
       "action": [
         0,
         -1
-      ],
-      "distance_to_goal": 21
+      ]
     },
     {
       "row": 6,
@@ -405,15 +380,13 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 1
+      ]
     },
     {
       "row": 6,
       "col": 7,
       "value": 0.0,
-      "action": null,
-      "distance_to_goal": 0
+      "action": null
     }
   ],
   "path": [
@@ -565,9 +538,6 @@
   "undiscounted_return": -15.0,
   "discounted_return": -13.994164535871146,
   "start_value": -13.994164535871148,
-  "bfs_shortest_path_length": 15,
-  "max_value_error": 3.552713678800501e-15,
-  "verified": true,
   "case": "assignment",
   "input_file": "cases/assignment.in",
   "gamma_comparison": [
@@ -576,24 +546,21 @@
       "iterations": 24,
       "path_length": 15,
       "start_value": -7.94108867905351,
-      "runtime_seconds": 0.0005391660015447997,
-      "verified": true
+      "runtime_seconds": 0.0005391660015447997
     },
     {
       "gamma": 0.95,
       "iterations": 24,
       "path_length": 15,
       "start_value": -10.73417539680493,
-      "runtime_seconds": 0.0005351250001695007,
-      "verified": true
+      "runtime_seconds": 0.0005351250001695007
     },
     {
       "gamma": 0.99,
       "iterations": 24,
       "path_length": 15,
       "start_value": -13.994164535871148,
-      "runtime_seconds": 0.0006626250033150427,
-      "verified": true
+      "runtime_seconds": 0.0006626250033150427
     }
   ]
 }

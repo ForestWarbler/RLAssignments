@@ -97,8 +97,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 9
+      ]
     },
     {
       "row": 1,
@@ -107,8 +106,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 8
+      ]
     },
     {
       "row": 1,
@@ -117,8 +115,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 7
+      ]
     },
     {
       "row": 1,
@@ -127,8 +124,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 6
+      ]
     },
     {
       "row": 1,
@@ -137,8 +133,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 5
+      ]
     },
     {
       "row": 1,
@@ -147,8 +142,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 4
+      ]
     },
     {
       "row": 1,
@@ -157,8 +151,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 3
+      ]
     },
     {
       "row": 2,
@@ -167,8 +160,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 8
+      ]
     },
     {
       "row": 2,
@@ -177,8 +169,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 7
+      ]
     },
     {
       "row": 2,
@@ -187,8 +178,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 6
+      ]
     },
     {
       "row": 2,
@@ -197,8 +187,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 5
+      ]
     },
     {
       "row": 2,
@@ -207,8 +196,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 4
+      ]
     },
     {
       "row": 2,
@@ -217,8 +205,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 3
+      ]
     },
     {
       "row": 2,
@@ -227,8 +214,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 2
+      ]
     },
     {
       "row": 3,
@@ -237,8 +223,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 7
+      ]
     },
     {
       "row": 3,
@@ -247,8 +232,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 6
+      ]
     },
     {
       "row": 3,
@@ -257,8 +241,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 5
+      ]
     },
     {
       "row": 3,
@@ -267,8 +250,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 4
+      ]
     },
     {
       "row": 3,
@@ -277,8 +259,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 3
+      ]
     },
     {
       "row": 3,
@@ -287,8 +268,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 2
+      ]
     },
     {
       "row": 3,
@@ -297,8 +277,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 1
+      ]
     },
     {
       "row": 4,
@@ -307,8 +286,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 6
+      ]
     },
     {
       "row": 4,
@@ -317,8 +295,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 5
+      ]
     },
     {
       "row": 4,
@@ -327,8 +304,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 4
+      ]
     },
     {
       "row": 4,
@@ -337,8 +313,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 3
+      ]
     },
     {
       "row": 4,
@@ -347,8 +322,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 2
+      ]
     },
     {
       "row": 4,
@@ -357,15 +331,13 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 1
+      ]
     },
     {
       "row": 4,
       "col": 7,
       "value": 0.0,
-      "action": null,
-      "distance_to_goal": 0
+      "action": null
     }
   ],
   "path": [
@@ -463,9 +435,6 @@
   "undiscounted_return": -9.0,
   "discounted_return": -8.64827525163591,
   "start_value": -8.64827525163591,
-  "bfs_shortest_path_length": 9,
-  "max_value_error": 4.440892098500626e-16,
-  "verified": true,
   "case": "open_room",
   "input_file": "cases/open_room.in",
   "gamma_comparison": [
@@ -474,24 +443,21 @@
       "iterations": 10,
       "path_length": 9,
       "start_value": -6.12579511,
-      "runtime_seconds": 0.0003101249967585318,
-      "verified": true
+      "runtime_seconds": 0.0003101249967585318
     },
     {
       "gamma": 0.95,
       "iterations": 10,
       "path_length": 9,
       "start_value": -7.395011805507812,
-      "runtime_seconds": 0.0002460830000927672,
-      "verified": true
+      "runtime_seconds": 0.0002460830000927672
     },
     {
       "gamma": 0.99,
       "iterations": 10,
       "path_length": 9,
       "start_value": -8.64827525163591,
-      "runtime_seconds": 0.00028545800159918144,
-      "verified": true
+      "runtime_seconds": 0.00028545800159918144
     }
   ]
 }

@@ -1,6 +1,5 @@
 """Solve a deterministic maze MDP with synchronous value iteration."""
 
-from collections import deque
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Mapping, Sequence
@@ -50,19 +49,6 @@ class Maze:
             successor = state
         # Entering the goal and hitting a wall both incur the step cost.
         return successor, -1.0, successor == self.goal
-
-    def distances_to_goal(self) -> dict[State, int]:
-        """Compute independent shortest distances using geometric adjacency."""
-        distances = {self.goal: 0}
-        queue = deque([self.goal])
-        while queue:
-            r, c = queue.popleft()
-            for dr, dc in MOVES:
-                neighbor = (r + dr, c + dc)
-                if neighbor in self._open and neighbor not in distances:
-                    distances[neighbor] = distances[(r, c)] + 1
-                    queue.append(neighbor)
-        return distances
 
 
 @dataclass

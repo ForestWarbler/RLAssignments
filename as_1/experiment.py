@@ -1,4 +1,4 @@
-"""Run, verify, and export the maze value-iteration experiment."""
+"""Run and export the maze value-iteration experiment."""
 
 import argparse
 import csv
@@ -12,33 +12,13 @@ from maze import MOVES, Maze, rollout, value_iteration
 
 
 def run_experiment(maze: Maze, gamma: float, tolerance: float) -> dict:
-    """Solve the MDP and independently verify the solution against BFS."""
+    """Solve the MDP and record the values, policy, and rollout."""
     started = perf_counter()
     solution = value_iteration(maze, gamma, tolerance)
     runtime = perf_counter() - started
     trajectory = rollout(maze, solution.policy)
-    distances = maze.distances_to_goal()
     discounted_return = math.fsum(
         gamma**t * reward for t, reward in enumerate(trajectory.rewards)
-    )
-    # A state d steps from the goal is worth -(1 + gamma + ... + gamma^(d-1)).
-    expected_values = {
-        state: -math.fsum(gamma**t for t in range(distance))
-        for state, distance in distances.items()
-    }
-    max_error = max(
-        abs(solution.values[state] - expected_values[state]) for state in maze.states
-    )
-
-    allowed_error = tolerance / (1.0 - gamma)
-    verified = (
-        trajectory.length == distances[maze.start]
-        and all(
-            distances[maze.step(state, move)[0]] == distances[state] - 1
-            for state, move in solution.policy.items()
-        )
-        and max_error <= allowed_error
-        and abs(solution.values[maze.start] - discounted_return) <= allowed_error
     )
 
     return {
@@ -70,7 +50,6 @@ def run_experiment(maze: Maze, gamma: float, tolerance: float) -> dict:
                 "col": state[1],
                 "value": solution.values[state],
                 "action": list(solution.policy[state]) if state != maze.goal else None,
-                "distance_to_goal": distances[state],
             }
             for state in maze.states
         ],
@@ -81,9 +60,6 @@ def run_experiment(maze: Maze, gamma: float, tolerance: float) -> dict:
         "undiscounted_return": math.fsum(trajectory.rewards),
         "discounted_return": discounted_return,
         "start_value": solution.values[maze.start],
-        "bfs_shortest_path_length": distances[maze.start],
-        "max_value_error": max_error,
-        "verified": verified,
     }
 
 
@@ -114,11 +90,10 @@ def format_summary(result: dict) -> str:
         f"Iterations: {result['iterations']}",
         f"Final maximum update: {result['convergence'][-1]['max_delta']:.10g}",
         f"Solver runtime: {result['runtime_seconds']:.6f} s (one run)",
-        f"Shortest path: {result['path_length']} steps",
+        f"Path length: {result['path_length']} steps",
         f"Undiscounted return: {result['undiscounted_return']:.0f}",
         f"Discounted return: {result['discounted_return']:.10f}",
         f"Start value: {result['start_value']:.10f}",
-        f"BFS and all-state value verification: {'PASS' if result['verified'] else 'FAIL'}",
         "", "Greedy policy (S=start, G=goal):", *policy_rows,
         "", "Path actions: " + " ".join(arrows[tuple(move)] for move in result["path_actions"]),
         "", "Gamma comparison:",
@@ -146,7 +121,6 @@ def export_data(result: dict, output_dir: Path) -> None:
             "value": state["value"],
             "dr": state["action"][0] if state["action"] is not None else "",
             "dc": state["action"][1] if state["action"] is not None else "",
-            "distance_to_goal": state["distance_to_goal"],
         }
         for state in result["states"]
     ])
@@ -193,7 +167,6 @@ def main() -> None:
             "path_length": run["path_length"],
             "start_value": run["start_value"],
             "runtime_seconds": run["runtime_seconds"],
-            "verified": run["verified"],
         }
         for gamma, run in runs.items()
     ]

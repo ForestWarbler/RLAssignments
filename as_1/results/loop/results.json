@@ -102,8 +102,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 10
+      ]
     },
     {
       "row": 1,
@@ -112,8 +111,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 9
+      ]
     },
     {
       "row": 1,
@@ -122,8 +120,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 8
+      ]
     },
     {
       "row": 1,
@@ -132,8 +129,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 7
+      ]
     },
     {
       "row": 1,
@@ -142,8 +138,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 6
+      ]
     },
     {
       "row": 1,
@@ -152,8 +147,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 5
+      ]
     },
     {
       "row": 1,
@@ -162,8 +156,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 4
+      ]
     },
     {
       "row": 2,
@@ -172,8 +165,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 9
+      ]
     },
     {
       "row": 2,
@@ -182,8 +174,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 3
+      ]
     },
     {
       "row": 3,
@@ -192,8 +183,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 8
+      ]
     },
     {
       "row": 3,
@@ -202,8 +192,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 2
+      ]
     },
     {
       "row": 4,
@@ -212,8 +201,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 7
+      ]
     },
     {
       "row": 4,
@@ -222,8 +210,7 @@
       "action": [
         1,
         0
-      ],
-      "distance_to_goal": 1
+      ]
     },
     {
       "row": 5,
@@ -232,8 +219,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 6
+      ]
     },
     {
       "row": 5,
@@ -242,8 +228,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 5
+      ]
     },
     {
       "row": 5,
@@ -252,8 +237,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 4
+      ]
     },
     {
       "row": 5,
@@ -262,8 +246,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 3
+      ]
     },
     {
       "row": 5,
@@ -272,8 +255,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 2
+      ]
     },
     {
       "row": 5,
@@ -282,15 +264,13 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 1
+      ]
     },
     {
       "row": 5,
       "col": 7,
       "value": 0.0,
-      "action": null,
-      "distance_to_goal": 0
+      "action": null
     }
   ],
   "path": [
@@ -397,9 +377,6 @@
   "undiscounted_return": -10.0,
   "discounted_return": -9.561792499119552,
   "start_value": -9.561792499119552,
-  "bfs_shortest_path_length": 10,
-  "max_value_error": 4.440892098500626e-16,
-  "verified": true,
   "case": "loop",
   "input_file": "cases/loop.in",
   "gamma_comparison": [
@@ -408,24 +385,21 @@
       "iterations": 11,
       "path_length": 10,
       "start_value": -6.5132155990000005,
-      "runtime_seconds": 0.0002452080007060431,
-      "verified": true
+      "runtime_seconds": 0.0002452080007060431
     },
     {
       "gamma": 0.95,
       "iterations": 11,
       "path_length": 10,
       "start_value": -8.02526121523242,
-      "runtime_seconds": 0.00023420799698214978,
-      "verified": true
+      "runtime_seconds": 0.00023420799698214978
     },
     {
       "gamma": 0.99,
       "iterations": 11,
       "path_length": 10,
       "start_value": -9.561792499119552,
-      "runtime_seconds": 0.00025504199584247544,
-      "verified": true
+      "runtime_seconds": 0.00025504199584247544
     }
   ]
 }

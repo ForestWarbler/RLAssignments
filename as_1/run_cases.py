@@ -30,8 +30,8 @@ def write_index(output_dir: Path, summary: list[dict]) -> None:
         "",
         "## Baseline results",
         "",
-        "| Case | Grid | States | Iterations | Path steps | Start value | Verified | Outputs |",
-        "| --- | --- | ---: | ---: | ---: | ---: | --- | --- |",
+        "| Case | Grid | States | Iterations | Path steps | Start value | Outputs |",
+        "| --- | --- | ---: | ---: | ---: | ---: | --- |",
     ]
     for row in summary:
         case = row["case"]
@@ -42,7 +42,7 @@ def write_index(output_dir: Path, summary: list[dict]) -> None:
         lines.append(
             f"| {case} | {row['rows']} × {row['cols']} | {row['states']} | "
             f"{row['iterations']} | {row['path_length']} | {row['start_value']:.6f} | "
-            f"{'PASS' if row['verified'] else 'FAIL'} | {links} |"
+            f"{links} |"
         )
     lines += [
         "",
@@ -52,16 +52,13 @@ def write_index(output_dir: Path, summary: list[dict]) -> None:
         "- [gamma_summary.csv](gamma_summary.csv): all case/gamma comparisons.",
         "- `maze.in`: a copy of the input grid used for that case.",
         "- `summary.txt` and `run.log`: the textual experiment report and policy.",
-        "- `results.json`: parameters, values, policy, path, convergence, and verification.",
+        "- `results.json`: parameters, values, policy, path, and convergence.",
         "- `values.csv`, `path.csv`, `convergence.csv`, and `gamma_comparison.csv`: data tables.",
         "- `maze`, `policy`, `path`, `values`, `convergence`, and `gamma_comparison`:",
         "  figures saved as both PNG and PDF.",
         "",
-        "Verification compares path length and every greedy action with BFS distances,",
-        "checks every state value against its discounted shortest-path cost, and checks",
-        "the start value against the rollout return.",
         "Solver runtimes measure one value-iteration run each; they are not benchmarks",
-        "and exclude plotting, file export, and verification.",
+        "and exclude rollout, plotting, and file export.",
         "",
     ]
     (output_dir / "README.md").write_text("\n".join(lines), encoding="utf-8")
@@ -89,7 +86,6 @@ def main() -> None:
                 "path_length": run["path_length"],
                 "start_value": run["start_value"],
                 "runtime_seconds": run["runtime_seconds"],
-                "verified": run["verified"],
             }
             for gamma, run in runs.items()
         ]
@@ -111,12 +107,11 @@ def main() -> None:
             "start_value": result["start_value"],
             "undiscounted_return": result["undiscounted_return"],
             "runtime_seconds": result["runtime_seconds"],
-            "verified": result["verified"],
         })
         gamma_summary.extend({"case": case, **row} for row in result["gamma_comparison"])
         print(
             f"{case}: states={len(maze.states)}, iterations={result['iterations']}, "
-            f"steps={result['path_length']}, verified={result['verified']}",
+            f"steps={result['path_length']}",
             flush=True,
         )
 

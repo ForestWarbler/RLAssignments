@@ -5,11 +5,10 @@ Tolerance: 1.0e-08
 Iterations: 9
 Final maximum update: 0
 Solver runtime: 0.000100 s (one run)
-Shortest path: 8 steps
+Path length: 8 steps
 Undiscounted return: -8
 Discounted return: -7.7255305572
 Start value: -7.7255305572
-BFS and all-state value verification: PASS
 
 Greedy policy (S=start, G=goal):
 ###########

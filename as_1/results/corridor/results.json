@@ -90,8 +90,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 8
+      ]
     },
     {
       "row": 1,
@@ -100,8 +99,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 7
+      ]
     },
     {
       "row": 1,
@@ -110,8 +108,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 6
+      ]
     },
     {
       "row": 1,
@@ -120,8 +117,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 5
+      ]
     },
     {
       "row": 1,
@@ -130,8 +126,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 4
+      ]
     },
     {
       "row": 1,
@@ -140,8 +135,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 3
+      ]
     },
     {
       "row": 1,
@@ -150,8 +144,7 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 2
+      ]
     },
     {
       "row": 1,
@@ -160,15 +153,13 @@
       "action": [
         0,
         1
-      ],
-      "distance_to_goal": 1
+      ]
     },
     {
       "row": 1,
       "col": 9,
       "value": 0.0,
-      "action": null,
-      "distance_to_goal": 0
+      "action": null
     }
   ],
   "path": [
@@ -257,9 +248,6 @@
   "undiscounted_return": -8.0,
   "discounted_return": -7.72553055720799,
   "start_value": -7.72553055720799,
-  "bfs_shortest_path_length": 8,
-  "max_value_error": 4.440892098500626e-16,
-  "verified": true,
   "case": "corridor",
   "input_file": "cases/corridor.in",
   "gamma_comparison": [
@@ -268,24 +256,21 @@
       "iterations": 9,
       "path_length": 8,
       "start_value": -5.6953279000000006,
-      "runtime_seconds": 7.204199937405065e-05,
-      "verified": true
+      "runtime_seconds": 7.204199937405065e-05
     },
     {
       "gamma": 0.95,
       "iterations": 9,
       "path_length": 8,
       "start_value": -6.731591374218749,
-      "runtime_seconds": 8.083300053840503e-05,
-      "verified": true
+      "runtime_seconds": 8.083300053840503e-05
     },
     {
       "gamma": 0.99,
       "iterations": 9,
       "path_length": 8,
       "start_value": -7.72553055720799,
-      "runtime_seconds": 0.00010041700443252921,
-      "verified": true
+      "runtime_seconds": 0.00010041700443252921
     }
   ]
 }
